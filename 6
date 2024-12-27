@@ -1,106 +1,324 @@
-#include <stdio.h> 
+<!DOCTYPE html>
 
-int my_max(int a, int b) 
 
-{ 
 
-return (a > b) ? a : b; 
+<html lang="en">
 
-} 
 
-int val[20],wt[20],n,c,v[20][20]; 
 
-int knap() 
+<head>
 
-{ int i,j; 
+ <title>Simple Calculator</title>
 
-for(i=0;i<=n;i++) 
+ <style>
 
-for(j=0;j<=c;j++) 
+ body {
 
-if(i==0||j==0) 
+ font-family: Arial, sans-serif;
 
-v[i][j] = 0; 
+ display: flex;
 
-else 
+ justify-content: center;
 
-if(wt[i]>j) 
+ align-items: center;
 
-v[i][j] = v[i-1][j]; 
 
-else 
 
-v[i][j] =my_max(v[i-1][j],(v[i-1][j-wt[i]]+val[i])); 
+ height: 100vh;
 
-return v[n][c]; 
 
-} 
 
-int main() 
+ margin: 0;
 
-{ int opt,i,j; 
+ background-color: #f0f0f0;
 
-printf("\nEnter the no of items in Knapsack : "); 
+ }
 
-scanf("%d",&n); 
+ .calculator {
 
-printf("\nEnter values (profit) of %d elements : ",n); 
+ background-color: #fff;
 
-for(i=1;i<=n;i++) 
+ border-radius: 8px;
 
-scanf("%d",&val[i]); 
+ box-shadow: 0 0 10px rgba(0,0,0,0.1);
 
-printf("\nEnter weight of %d elements : ",n); 
+ padding: 20px;
 
-for(i=1;i<=n;i++) 
-scanf("%d",&wt[i]); 
+ width: 300px;
 
-printf("\n Enter the capacity of Knapsack : "); 
+ }
 
-scanf("%d",&c); 
+ #display {
 
-opt = knap(); 
+ width: 100%;
 
-printf("\n\nCapacity"); 
+ height: 40px;
 
-for(j=0;j<=c;j++) 
+ font-size: 1.5em;
 
-printf("%4d",j); 
+ text-align: right;
 
-printf("\n"); 
+ margin-bottom: 10px;
 
-for(i=0;i<=n;i++) 
+ padding: 5px;
 
-{ 
+ box-sizing: border-box;
 
-printf("\nItem-%2d:",i); 
+ }
 
-for(j=0;j<=c;j++) 
+ .buttons {
 
-printf("%4d",v[i][j]); 
+ display: grid;
 
-} 
+ grid-template-columns: repeat(4, 1fr);
 
-printf("\n\nOptimal solution is : %d",opt); 
+ gap: 10px;
 
-printf("\n\n The selected items are : "); 
+ }
 
-while(n>0) 
+ button {
 
-{ 
+ padding: 10px;
 
-if(v[n][c] != v[n-1][c]) 
+ font-size: 1.2em;
 
-{ 
+ border: none;
 
-printf("%d\t",n); 
+ background-color: #e0e0e0;
 
-c = c - wt[n]; 
+ cursor: pointer;
 
-}n --; 
+ border-radius: 4px;
 
-} 
+ }
 
-return(0); 
+ button:hover {
 
-}
+ background-color: #d0d0d0;
+
+ }
+
+ .operator {
+
+ background-color: #f0a030;
+
+ color: white;
+
+ }
+
+ .operator:hover {
+
+ background-color: #e09020;
+
+ }
+
+ </style>
+
+</head>
+
+<body>
+
+ <div class="calculator">
+
+ <input type="text" id="display" readonly>
+
+ <div class="buttons">
+
+ <button onclick="appendToDisplay('7')">7</button>
+
+ <button onclick="appendToDisplay('8')">8</button>
+
+
+
+ <button onclick="appendToDisplay('9')">9</button>
+
+
+
+ <button class="operator" onclick="setOperation('+')">&plus;</button>
+
+ <button onclick="appendToDisplay('4')">4</button>
+
+ <button onclick="appendToDisplay('5')">5</button>
+
+ <button onclick="appendToDisplay('6')">6</button>
+
+ <button class="operator" onclick="setOperation('-')">&minus;</button>
+
+ <button onclick="appendToDisplay('1')">1</button>
+
+ <button onclick="appendToDisplay('2')">2</button>
+
+ <button onclick="appendToDisplay('3')">3</button>
+
+ <button class="operator" onclick="setOperation('*')">&times;</button>
+
+ <button onclick="appendToDisplay('0')">0</button>
+
+ <button onclick="appendToDisplay('.')">.</button>
+
+ <button class="operator" onclick="calculate()">&equals;</button>
+
+ <button class="operator" onclick="setOperation('/')">&divide;</button>
+
+ <button class="operator" onclick="setOperation('%')">%</button>
+
+ <button class="operator" onclick="setOperation('^')">x<sup>y</sup></button>
+
+ <button class="operator" onclick="squareRoot()">√</button>
+
+ <button class="operator" onclick="square()">x<sup>2</sup></button>
+
+ <button onclick="clearDisplay()">C</button>
+
+ </div>
+
+ </div>
+
+ <script>
+
+ let display = document.getElementById('display');
+
+ let currentValue = '';
+
+ let operation = '';
+
+ let previousValue = '';
+
+ function appendToDisplay(value) {
+
+ currentValue += value;
+
+ display.value = currentValue;
+
+ }
+
+ function clearDisplay() {
+
+ currentValue = '';
+
+ operation = '';
+
+ previousValue = '';
+
+ display.value = '';
+
+ }
+
+ function setOperation(op) {
+
+ if (currentValue !== '') {
+
+ if (previousValue !== '') {
+
+ calculate();
+
+ }
+
+ operation = op;
+
+ previousValue = currentValue;
+
+ currentValue = '';
+
+ }
+
+ }
+
+ function calculate() {
+
+
+
+ if (previousValue !== '' && currentValue !== '') {
+
+
+
+ let result;
+
+ const prev = parseFloat(previousValue);
+
+ const current = parseFloat(currentValue);
+
+ switch(operation) {
+
+ case '+':
+
+ result = prev + current;
+
+ break;
+
+ case '-':
+
+ result = prev - current;
+
+ break;
+
+ case '*':
+
+ result = prev * current;
+
+ break;
+
+ case '/':
+
+ result = prev / current;
+
+ break;
+
+ case '%':
+
+ result = prev % current;
+
+ break;
+
+ case '^':
+
+ result = Math.pow(prev, current);
+
+ break;
+
+ }
+
+ display.value = result;
+
+ previousValue = result.toString();
+
+ currentValue = '';
+
+ operation = '';
+
+ }
+
+ }
+
+ function squareRoot() {
+
+ if (currentValue !== '') {
+
+ const result = Math.sqrt(parseFloat(currentValue));
+
+ display.value = result;
+
+ currentValue = result.toString();
+
+ }
+
+ }
+
+ function square() {
+
+ if (currentValue !== '') {
+
+ const result = Math.pow(parseFloat(currentValue), 2);
+
+ display.value = result;
+
+ currentValue = result.toString();
+
+ }
+
+ }
+
+ </script>
+
+</body>
+</html>
